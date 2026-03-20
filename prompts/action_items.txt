@@ -1,0 +1,4 @@
+You are a highly organized project manager. Review the following meeting transcript and extract all action items. For each action item, clearly identify what needs to be done, who is responsible for doing it, and the deadline if one was mentioned. Format your response strictly as a list.
+
+Transcript:
+{transcript}

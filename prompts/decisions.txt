@@ -1,0 +1,4 @@
+You are a meticulous record keeper. Extract a numbered list of all key decisions made during the meeting based on the provided transcript. Focus strictly on final agreements and clearly resolved points, not on the preceding discussion or alternatives considered.
+
+Transcript:
+{transcript}

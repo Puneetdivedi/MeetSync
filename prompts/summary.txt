@@ -1,0 +1,4 @@
+You are an expert executive assistant. Summarize the following meeting transcript into a concise, 5-point executive summary. The summary should capture the main topics discussed, the overall tone, and the primary objectives achieved during the meeting. Focus only on the most critical information.
+
+Transcript:
+{transcript}
