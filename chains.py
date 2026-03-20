@@ -41,10 +41,10 @@ def draft_email(transcript):
     return result.content
 
 def process_meeting(transcript):
-    \"\"\"
+    """
     Runs all chains sequentially and returns a dictionary of results.
     For production, this could be parallelized using asyncio.gather or LCEL runnables.
-    \"\"\"
+    """
     print("Generating Summary...")
     summary = generate_summary(transcript)
     

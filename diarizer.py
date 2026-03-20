@@ -2,10 +2,10 @@ from pyannote.audio import Pipeline
 from config import HF_TOKEN
 
 def diarize_audio(audio_path):
-    \"\"\"
+    """
     Performs speaker diarization on an audio file using pyannote.audio.
     Requires a valid Hugging Face token in the environment.
-    \"\"\"
+    """
     if not HF_TOKEN:
         raise ValueError("HF_TOKEN is not set. Diarization requires a Hugging Face token.")
         
@@ -25,7 +25,7 @@ def diarize_audio(audio_path):
     return diarization
 
 def format_timestamp(seconds):
-    \"\"\"Format seconds to HH:MM:SS or MM:SS\"\"\"
+    """Format seconds to HH:MM:SS or MM:SS"""
     hours = int(seconds // 3600)
     minutes = int((seconds % 3600) // 60)
     secs = int(seconds % 60)
@@ -34,9 +34,9 @@ def format_timestamp(seconds):
     return f"{minutes:02d}:{secs:02d}"
 
 def merge_transcription_and_diarization(whisper_segments, diarization_result):
-    \"\"\"
+    """
     Combines Whisper's timestamped text segments with pyannote's speaker labels.
-    \"\"\"
+    """
     final_transcript = []
     
     # Convert diarization annotation to a list of (start, end, speaker)
