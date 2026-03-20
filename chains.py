@@ -66,6 +66,12 @@ def build_chains():
     
     return parallel_chain
 
+from tenacity import retry, stop_after_attempt, wait_exponential
+
+@retry(stop=stop_after_attempt(3), wait=wait_exponential(multiplier=1, min=2, max=10))
+def _invoke_parallel_chain(parallel_chain, transcript):
+    return parallel_chain.invoke({"transcript": transcript})
+
 def process_meeting(transcript: str):
     """
     Runs all extraction chains concurrently using LCEL RunnableParallel.
@@ -74,8 +80,8 @@ def process_meeting(transcript: str):
     print("Initiating parallel AI processing (Summary, Actions, Decisions, Email)...")
     parallel_chain = build_chains()
     
-    # Run all tasks concurrently
-    results = parallel_chain.invoke({"transcript": transcript})
+    # Run all tasks concurrently with retry logic for resiliency
+    results = _invoke_parallel_chain(parallel_chain, transcript)
     
     # Format the structured Pydantic outputs back into Markdown/List formats for easy saving/viewing
     # Alternatively, the app.py can consume the raw objects, but stringifying here keeps exporter.py working.
@@ -158,3 +164,35 @@ def ask_meeting(vectorstore, question: str):
     )
     
     return rag_chain.invoke(question)
+
+def ask_meeting_stream(vectorstore, question: str):
+    """
+    Streaming version of ask_meeting. Yields chunks for real-time UI updates.
+    """
+    from langchain_core.runnables import RunnablePassthrough
+    from langchain_core.output_parsers import StrOutputParser
+    
+    llm = get_llm()
+    retriever = vectorstore.as_retriever()
+    
+    template = """You are a helpful AI assistant that answers questions based ONLY on the following meeting transcript excerpts.
+    If the context does not provide the answer, say "I cannot find the answer to that in the meeting transcript."
+    Do not hallucinate external information.
+    
+    Context:
+    {context}
+    
+    Question: {question}
+    
+    Answer:"""
+    
+    custom_rag_prompt = PromptTemplate.from_template(template)
+    
+    rag_chain = (
+        {"context": retriever, "question": RunnablePassthrough()}
+        | custom_rag_prompt
+        | llm
+        | StrOutputParser()
+    )
+    
+    return rag_chain.stream(question)

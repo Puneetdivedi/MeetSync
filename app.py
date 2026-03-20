@@ -4,7 +4,7 @@ import pandas as pd
 from config import GROQ_API_KEY
 from transcriber import transcribe_audio
 from diarizer import diarize_audio, merge_transcription_and_diarization
-from chains import process_meeting, setup_rag, ask_meeting
+from chains import process_meeting, setup_rag, ask_meeting, ask_meeting_stream
 from exporter import export_docx, export_pdf
 
 st.set_page_config(page_title="MeetSync GenAI Server", page_icon="🎙️", layout="wide")
@@ -152,9 +152,17 @@ with tab3:
                 st.markdown(prompt)
                 
             with st.chat_message("assistant"):
-                with st.spinner("Searching transcripts..."):
-                    answer = ask_meeting(st.session_state['vectorstore'], prompt)
-                    st.markdown(answer)
+                response_stream = ask_meeting_stream(st.session_state['vectorstore'], prompt)
+                answer = st.write_stream(response_stream)
             st.session_state['chat_history'].append({"role": "assistant", "content": answer})
+            
+        # Export Chat History
+        if st.session_state['chat_history']:
+            st.divider()
+            chat_text = "MeetSync Chat History\n\n"
+            for msg in st.session_state['chat_history']:
+                role_name = "You" if msg['role'] == 'user' else "AI"
+                chat_text += f"{role_name}: {msg['content']}\n\n"
+            st.download_button("Export Chat History", data=chat_text, file_name="MeetSync_Chat_History.txt")
     else:
         st.info("Please process a meeting first to activate the Q&A agent.")
