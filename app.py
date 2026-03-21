@@ -19,108 +19,98 @@ st.set_page_config(
 st.markdown("""
 <style>
     /* Import modern typography */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
     
     html, body, [class*="css"] {
         font-family: 'Inter', sans-serif;
     }
     
-    /* Main App Background - Dark Premium Gradient */
+    /* Main App Background - Minimalist Dark */
     .stApp {
-        background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-        color: #f8fafc;
+        background-color: #09090b;
+        color: #fafafa;
     }
     
     /* Headers */
     h1, h2, h3, h4 {
-        color: #f1f5f9 !important;
-        font-weight: 700 !important;
-        letter-spacing: -0.5px;
+        color: #fafafa !important;
+        font-weight: 600 !important;
     }
     
     /* Metrics Styling */
     div[data-testid="stMetricValue"] {
-        font-size: 2.5rem;
-        font-weight: 800;
-        color: #10b981; /* Emerald green */
-        text-shadow: 0 2px 10px rgba(16, 185, 129, 0.2);
+        font-size: 2.2rem;
+        font-weight: 600;
+        color: #fafafa;
     }
     div[data-testid="stMetricLabel"] {
-        font-size: 1rem;
+        font-size: 0.85rem;
         font-weight: 500;
-        color: #94a3b8;
+        color: #a1a1aa;
         text-transform: uppercase;
-        letter-spacing: 1px;
+        letter-spacing: 0.5px;
     }
     
-    /* Widget backgrounds: text areas, file uploaders */
+    /* Widget backgrounds */
     .stTextArea textarea, .stTextInput input {
-        background-color: rgba(30, 41, 59, 0.7) !important;
-        border: 1px solid #334155 !important;
-        color: #f8fafc !important;
-        border-radius: 8px !important;
-        transition: all 0.3s ease;
+        background-color: #18181b !important;
+        border: 1px solid #27272a !important;
+        color: #fafafa !important;
+        border-radius: 6px !important;
     }
     .stTextArea textarea:focus, .stTextInput input:focus {
-        border-color: #6366f1 !important;
-        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3) !important;
+        border-color: #a1a1aa !important;
+        box-shadow: none !important;
     }
     
     /* Buttons */
     .stButton>button {
-        background-color: #6366f1 !important;
-        color: white !important;
+        background-color: #fafafa !important;
+        color: #09090b !important;
         border: none !important;
-        border-radius: 8px !important;
-        font-weight: 600 !important;
-        padding: 10px 24px !important;
-        transition: all 0.2s ease;
-        box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+        padding: 8px 20px !important;
+        transition: background-color 0.2s ease;
     }
     .stButton>button:hover {
-        background-color: #4f46e5 !important;
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(99, 102, 241, 0.6);
+        background-color: #e4e4e7 !important;
     }
 
     /* Tabs Styling */
     .stTabs [data-baseweb="tab-list"] {
-        gap: 12px;
-        background-color: rgba(15, 23, 42, 0.6);
-        padding: 10px;
-        border-radius: 12px;
-        box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        gap: 4px;
+        background-color: #18181b;
+        padding: 4px;
+        border-radius: 8px;
     }
     .stTabs [data-baseweb="tab"] {
-        height: 45px;
-        border-radius: 8px;
+        height: 38px;
+        border-radius: 6px;
         background-color: transparent;
-        color: #94a3b8;
-        padding: 0 20px;
-        font-weight: 600;
+        color: #a1a1aa;
+        font-weight: 500;
         border: none;
-        transition: all 0.3s ease;
+        padding: 0 16px;
     }
     .stTabs [aria-selected="true"] {
-        background-color: #3b82f6 !important;
-        color: white !important;
-        box-shadow: 0 2px 8px rgba(59, 130, 246, 0.4);
+        background-color: #27272a !important;
+        color: #fafafa !important;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.5);
     }
     
-    /* Glassmorphism containers */
+    /* Containers / DataFrames */
     [data-testid="stExpander"], .stDataFrame {
-        background: rgba(30, 41, 59, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 12px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        background-color: #09090b;
+        border: 1px solid #27272a;
+        border-radius: 8px;
     }
     
     /* Chat bubbles */
     .stChatMessage {
-        background: rgba(30, 41, 59, 0.8);
-        border-radius: 16px;
-        border: 1px solid rgba(255,255,255,0.05);
+        background-color: #18181b;
+        border-radius: 8px;
+        border: 1px solid #27272a;
         padding: 1rem;
         margin-bottom: 1rem;
     }
