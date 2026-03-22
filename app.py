@@ -168,9 +168,10 @@ with tab1:
                 st.write("Using manually pasted transcript.")
                 transcript = pasted_transcript
             elif uploaded_file:
-                temp_path = f"temp_{uploaded_file.name}"
-                with open(temp_path, "wb") as f:
-                    f.write(uploaded_file.getbuffer())
+                import tempfile
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
+                    tmp_file.write(uploaded_file.getbuffer())
+                    temp_path = tmp_file.name
                 
                 try:
                     st.write("🎙️ Booting Whisper Transcriber...")
@@ -188,7 +189,10 @@ with tab1:
                     st.error(f"Pipeline Error: {e}")
                 finally:
                     if os.path.exists(temp_path):
-                        os.remove(temp_path)
+                        try:
+                            os.remove(temp_path)
+                        except:
+                            pass
             
             if transcript:
                 st.session_state['transcript'] = transcript
