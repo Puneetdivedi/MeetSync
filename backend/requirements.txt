@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+python-multipart
+openai-whisper
+pyannote.audio
+langchain
+langchain-groq
+langchain-community
+langchain-core
+python-dotenv
+python-docx
+fpdf2
+pydantic
+faiss-cpu
+sentence-transformers
+tenacity
+pandas
