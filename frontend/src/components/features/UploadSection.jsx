@@ -5,13 +5,14 @@ import { motion } from 'framer-motion';
 import { UploadCloud, FileAudio, CheckCircle2, Zap } from 'lucide-react';
 import { Button } from '../ui/Button';
 
-export function UploadSection() {
+export function UploadSection({ onUploadSuccess }) {
   const [file, setFile] = useState(null);
   const [status, setStatus] = useState('idle');
 
   const onDrop = useCallback(acceptedFiles => {
     if (acceptedFiles.length > 0) {
       setFile(acceptedFiles[0]);
+      setStatus('idle');
     }
   }, []);
 
@@ -28,11 +29,30 @@ export function UploadSection() {
     maxFiles: 1
   });
 
-  const handleExecute = () => {
+  const handleExecute = async () => {
+    if (!file) return;
     setStatus('processing');
-    setTimeout(() => {
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    try {
+      const response = await fetch('http://localhost:8000/api/process', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error('Analysis failed.');
+      }
+      
+      const data = await response.json();
       setStatus('done');
-    }, 2500);
+      if (onUploadSuccess) onUploadSuccess(data.results);
+    } catch (error) {
+      console.error(error);
+      setStatus('error');
+    }
   };
 
   return (
