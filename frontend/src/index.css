@@ -1,13 +1,20 @@
+@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --color-background: #09090b;
+  --color-surface: #18181b;
+  --color-border: #27272a;
+  --color-primary: #fafafa;
+  --color-muted: #a1a1aa;
+}
 
 @layer base {
   body {
-    @apply bg-background text-primary font-sans antialiased;
+    background-color: var(--color-background);
+    color: var(--color-primary);
     font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
   }
 }
 
@@ -15,9 +22,11 @@
   .btn-primary {
     @apply px-4 py-2 bg-primary text-background font-medium rounded-lg hover:bg-zinc-200 transition-colors shadow-lg shadow-white/5;
   }
+
   .btn-secondary {
     @apply px-4 py-2 bg-surface text-primary font-medium rounded-lg border border-border hover:bg-border transition-colors;
   }
+
   .card {
     @apply bg-surface border border-border rounded-xl shadow-2xl;
   }
