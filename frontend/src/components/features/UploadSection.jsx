@@ -111,6 +111,10 @@ export function UploadSection({ onUploadSuccess }) {
           <span className="flex items-center gap-2 text-green-400">
             <CheckCircle2 className="w-5 h-5" /> Pipeline Complete
           </span>
+        ) : status === 'error' ? (
+          <span className="flex items-center gap-2 text-red-400">
+            Analysis Failed. Try Again.
+          </span>
         ) : status === 'processing' ? (
           'Executing Neural Extraction...'
         ) : (
