@@ -15,3 +15,5 @@ faiss-cpu
 sentence-transformers
 tenacity
 pandas
+pypdf
+openpyxl

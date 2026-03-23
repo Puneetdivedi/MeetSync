@@ -5,6 +5,9 @@ from pydantic import BaseModel
 import tempfile
 import uuid
 import os
+import pypdf
+import docx
+import pandas as pd
 
 from transcriber import transcribe_audio
 from diarizer import diarize_audio, merge_transcription_and_diarization
@@ -36,17 +39,36 @@ async def process_audio(
     if transcript_text.strip():
         transcript = transcript_text
     elif file:
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".mp3") as tmp_file:
+        file_ext = os.path.splitext(file.filename)[1].lower() if file.filename else ".mp3"
+        with tempfile.NamedTemporaryFile(delete=False, suffix=file_ext) as tmp_file:
             tmp_file.write(await file.read())
             temp_path = tmp_file.name
             
         try:
-            t_result = transcribe_audio(temp_path)
-            if use_diarization:
-                d_result = diarize_audio(temp_path)
-                transcript = merge_transcription_and_diarization(t_result['segments'], d_result)
+            if file_ext in [".mp3", ".wav", ".m4a"]:
+                t_result = transcribe_audio(temp_path)
+                if use_diarization:
+                    d_result = diarize_audio(temp_path)
+                    transcript = merge_transcription_and_diarization(t_result['segments'], d_result)
+                else:
+                    transcript = t_result['text']
+            elif file_ext == ".pdf":
+                reader = pypdf.PdfReader(temp_path)
+                transcript = "\n".join([page.extract_text() for page in reader.pages if page.extract_text()])
+            elif file_ext == ".docx":
+                doc = docx.Document(temp_path)
+                transcript = "\n".join([p.text for p in doc.paragraphs])
+            elif file_ext == ".txt":
+                with open(temp_path, "r", encoding="utf-8", errors="ignore") as f:
+                    transcript = f.read()
+            elif file_ext in [".xlsx", ".csv"]:
+                if file_ext == ".csv":
+                    df = pd.read_csv(temp_path)
+                else:
+                    df = pd.read_excel(temp_path)
+                transcript = df.to_string()
             else:
-                transcript = t_result['text']
+                raise HTTPException(status_code=400, detail=f"Unsupported file format: {file_ext}")
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
         finally:

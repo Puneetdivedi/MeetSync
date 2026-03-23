@@ -18,7 +18,12 @@ export function UploadSection() {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ 
     onDrop,
     accept: {
-      'audio/*': ['.mp3', '.wav', '.m4a']
+      'audio/*': ['.mp3', '.wav', '.m4a'],
+      'application/pdf': ['.pdf'],
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document': ['.docx'],
+      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': ['.xlsx'],
+      'text/plain': ['.txt'],
+      'text/csv': ['.csv']
     },
     maxFiles: 1
   });
@@ -68,9 +73,9 @@ export function UploadSection() {
             </div>
             <div className="space-y-1">
               <p className="text-base font-medium text-primary transition-colors">
-                {isDragActive ? "Drop to engage neural link..." : "Drag & drop recording here"}
+                {isDragActive ? "Drop to engage neural link..." : "Drag & drop recording or document here"}
               </p>
-              <p className="text-muted text-sm">or click to browse local files (MP3, WAV, M4A)</p>
+              <p className="text-muted text-sm">or click to browse local files (Audio, PDF, DOCX, XLSX, TXT)</p>
             </div>
           </>
         )}
